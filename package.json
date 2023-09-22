@@ -20,7 +20,9 @@
   "dependencies": {
     "discord.js": "^14.13.0",
     "dotenv": "^16.3.1",
-    "node-fetch": "^3.3.2",
+    "easy-table": "^1.2.0",
+    "eslint": "^8.49.0",
+    "node-fetch": "^2.7.0",
     "nodemon": "^3.0.1"
   }
 }
