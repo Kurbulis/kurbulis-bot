@@ -1,12 +1,17 @@
+const { SlashCommandBuilder } = require("@discordjs/builders")
+
 module.exports = {
-    data: {
-        name: "ping",
-        description: "Get ponged"
-    },
-    async run(msg, client) {
-        const m = await msg.reply("Ping?");
-        const diff = m.createdTimestamp - msg.createdTimestamp
+    data: new SlashCommandBuilder().setName("ping").setDescription("Pong!"),
+    async execute(interaction, client) {
+        const reply = await interaction.reply({
+            content: `Ping?`,
+            emphemeral: false,
+            fetchReply: true,
+        })
+
+        const diff = reply.createdTimestamp - interaction.createdTimestamp
         const ping = client.ws.ping
-        m.edit(`Pong! 🏓 (Round trip took: ${diff}ms. Heartbeat: ${ping}ms.)`)
+        // const ping = Math.round(client.ws.ping);
+        return interaction.editReply(`Pong! 🏓 (Round trip took: ${diff}ms. Heartbeat: ${ping}ms.)`)
     }
 }

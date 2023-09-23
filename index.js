@@ -1,6 +1,10 @@
 const fs = require("fs")
-const { Client, GatewayIntentBits } = require("discord.js")
+const { Client, GatewayIntentBits, Collection } = require("discord.js")
+const Database = require("./database/Database")
 require("dotenv").config()
+
+const db = new Database()
+db.connect()
 
 const client = new Client({
     intents: [
@@ -14,27 +18,26 @@ const client = new Client({
 
 // Load all commands
 const commandFiles = fs.readdirSync("./commands").filter((file) => file.endsWith(".js"))
-client.commands = new Map()
+const commands = []
+client.commands = new Collection()
 
 for (const file of commandFiles) {
     const command = require(`./commands/${file}`)
-    console.log(`Loading ${command.data.name} command...`)
-
-    if(client.commands.get(command.data.name))
-        throw new Error("Cannot have two commands with the same name.")
-
-    client.commands.set(command.data.name.toLowerCase(), command)
+    console.log(`Loading command ${file}...`)
+    commands.push(command.data.toJSON())
+    client.commands.set(command.data.name, command)
 }
 
-// Load all events
+//load all events
 const eventFiles = fs.readdirSync("./events").filter((file) => file.endsWith(".js"))
 for (const file of eventFiles) {
     const event = require(`./events/${file}`)
-    console.log(`Loading ${event.name} event...`)
+    console.log(`Loading event ${file}...`)
+
     if (event.once) {
-        client.once(event.name, (...args) => event.execute(...args, client))
+        client.once(event.name, (...args) => event.execute(...args, commands, client, client.commands))
     } else {
-        client.on(event.name, (...args) => event.execute(...args, client))
+        client.on(event.name, (...args) => event.execute(...args, commands, client.commands))
     }
 }
 

@@ -1,3 +1,5 @@
+// Author: [Markuss Mišķis](https://vespu.eu)
+
 const fetch = require("node-fetch")
 
 module.exports = {
@@ -11,10 +13,10 @@ module.exports = {
             fetch("https://izmainas.rtk.lv/schedule/screenData")
                 .then(response => response.json())
                 .then(data => {
-                    const today = data.result.today.filter(entry => entry.group.groupName.includes(group));
-                    const tomorrow = data.result.tomorrow.filter(entry => entry.group.groupName.includes(group));
-                    if (today.length > 0) output.today = this.combineString(today);
-                    if (tomorrow.length > 0) output.tomorrow = this.combineString(tomorrow);
+                        const today = data.result.today.filter(entry => entry.group.groupName.includes(group));
+                        const tomorrow = data.result.tomorrow.filter(entry => entry.group.groupName.includes(group));
+                        if (today.length > 0) output.today = this.combineString(today);
+                        if (tomorrow.length > 0) output.tomorrow = this.combineString(tomorrow);
                     
                     resolve(output)
                 })
