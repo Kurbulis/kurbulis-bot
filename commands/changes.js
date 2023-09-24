@@ -60,12 +60,12 @@ module.exports = {
             switch(interaction.options.getSubcommand()) {
                 case("today"):
                     interaction.editReply({
-                        embeds: [embedTime(data.today) ?? noChanges]
+                        embeds: [embedTime(data.today)]
                     })
                     break
                 case("tomorrow"):
                     interaction.editReply({
-                        embeds: [embedTime(data.tomorrow) ?? noChanges]
+                        embeds: [embedTime(data.tomorrow)]
                     })
                     break
             }

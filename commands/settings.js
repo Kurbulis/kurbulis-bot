@@ -3,7 +3,7 @@ const userSettings = require("../database/schemas/UserSettings")
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName("settings")
+        .setName("set")
         .setDescription("Mainīt savus iestatījumus")
         .addSubcommand(
             new SlashCommandSubcommandBuilder()
