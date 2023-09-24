@@ -29,11 +29,15 @@ module.exports = {
 
             const settings = await userSettings.findOne({ user_id: interaction.user.id})
 
-            const group = interaction.options.getString('grupa') ?? settings.group ?? "DT1-2";
+            const getGroup = () => {
+                if(interaction.options.getString('grupa')) return interaction.options.getString('grupa') 
+                if(!settings) return "DT1-2"
+                return settings.group
+            }
 
-            const data = await changes.get(group.toUpperCase())
+            const data = await changes.get(getGroup().toUpperCase())
 
-            const embedTime = (input) => {
+            const embedGen = (input) => {
 
                 if(!input[0]) return {
                     color: 0x191919,
@@ -47,7 +51,6 @@ module.exports = {
                 }
 
                 input.forEach((a) => {
-                    console.log(a)
                     embed.fields.push({ 
                         name: `${a.pair}. pāris`, 
                         value: `${a.lesson} (${a.classroom} kabinets)`, 
@@ -60,12 +63,14 @@ module.exports = {
             switch(interaction.options.getSubcommand()) {
                 case("today"):
                     interaction.editReply({
-                        embeds: [embedTime(data.today)]
+                        content: `Izmaiņas ${getGroup()} grupai:`,
+                        embeds: [embedGen(data.today)]
                     })
                     break
                 case("tomorrow"):
                     interaction.editReply({
-                        embeds: [embedTime(data.tomorrow)]
+                        content: `Izmaiņas ${getGroup()} grupai:`,
+                        embeds: [embedGen(data.tomorrow)]
                     })
                     break
             }
